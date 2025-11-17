@@ -7,7 +7,8 @@
 //
 
 #import "SJClipsSaveResultToAlbumHandler.h"
-#import <AssetsLibrary/AssetsLibrary.h>
+//#import <AssetsLibrary/AssetsLibrary.h>
+#import <UIKit/UIKit.h>
 #import <Photos/Photos.h>
 #import <MobileCoreServices/UTCoreTypes.h>
 #import "SJVideoPlayerConfigurations.h"
@@ -97,18 +98,18 @@ NS_ASSUME_NONNULL_BEGIN
         }];
     }
     else {
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
-        ALAssetsLibrary *library = [[ALAssetsLibrary alloc] init];
-        NSDictionary *metadata = @{@"UTI":(__bridge NSString *)kUTTypeGIF};
-        [library writeImageDataToSavedPhotosAlbum:result.data metadata:metadata completionBlock:^(NSURL *assetURL, NSError *error) {
-            __strong typeof(_self) self = _self;
-            if ( !self ) return ;
-            dispatch_async(dispatch_get_main_queue(), ^{
-                if ( self.completionHandler ) self.completionHandler(!error, error?[[SJClipsSaveResultFailed alloc] initWithReason:SJClipsSaveResultToAlbumFailedReasonAuthDenied]:nil);
-            });
-        }];
-#pragma clang diagnostic pop
+//#pragma clang diagnostic push
+//#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+//        ALAssetsLibrary *library = [[ALAssetsLibrary alloc] init];
+//        NSDictionary *metadata = @{@"UTI":(__bridge NSString *)kUTTypeGIF};
+//        [library writeImageDataToSavedPhotosAlbum:result.data metadata:metadata completionBlock:^(NSURL *assetURL, NSError *error) {
+//            __strong typeof(_self) self = _self;
+//            if ( !self ) return ;
+//            dispatch_async(dispatch_get_main_queue(), ^{
+//                if ( self.completionHandler ) self.completionHandler(!error, error?[[SJClipsSaveResultFailed alloc] initWithReason:SJClipsSaveResultToAlbumFailedReasonAuthDenied]:nil);
+//            });
+//        }];
+//#pragma clang diagnostic pop
     }
 }
 
