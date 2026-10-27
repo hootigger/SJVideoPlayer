@@ -199,9 +199,14 @@ _isIPhoneXSeries(void) {
     }
 }
 
+- (void)didMoveToWindow {
+    [super didMoveToWindow];
+    [self _updateTopLayout:nil];
+}
+
 - (void)_observeNotifies {
     __weak typeof(self) _self = self;
-    _notifyToken = [NSNotificationCenter.defaultCenter addObserverForName:UIApplicationWillChangeStatusBarOrientationNotification object:nil queue:nil usingBlock:^(NSNotification * _Nonnull note) {
+    _notifyToken = [NSNotificationCenter.defaultCenter addObserverForName:UIDeviceOrientationDidChangeNotification object:nil queue:nil usingBlock:^(NSNotification * _Nonnull note) {
         __strong typeof(_self) self = _self;
         if ( !self ) return;
         [self _updateTopLayout:note];
@@ -212,7 +217,17 @@ _isIPhoneXSeries(void) {
     if ( !_topAdapter ) return;
     if ( _screen.is_iPhoneXSeries && _autoAdjustLayoutWhenDeviceIsIPhoneXSeries ) return;
     [UIView animateWithDuration:0 animations:^{} completion:^(BOOL finished) {
-        UIInterfaceOrientation orientation = notify?[notify.userInfo[UIApplicationStatusBarOrientationUserInfoKey] integerValue]: UIApplication.sharedApplication.statusBarOrientation;
+        UIInterfaceOrientation orientation;
+        if (@available(iOS 13.0, *)) {
+            UIWindowScene *scene = self.window.windowScene;
+            if (@available(iOS 16.0, *)) {
+                orientation = scene.effectiveGeometry.interfaceOrientation;
+            } else {
+                orientation = scene.interfaceOrientation;
+            }
+        } else {
+            orientation = UIApplication.sharedApplication.statusBarOrientation;
+        }
         switch ( orientation ) {
             case UIInterfaceOrientationUnknown: break;
             case UIInterfaceOrientationPortrait:
